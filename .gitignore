@@ -35,6 +35,9 @@ yarn-error.log*
 # exceto o exemplo versionado (sem segredos)
 !.env.example
 
+# docs locais (spec da API, planos) — não versionar
+docs/
+
 # vercel
 .vercel
 
