@@ -1,0 +1,5281 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API",
+    "description": "API Documentation",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {}
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Liveness probe",
+        "tags": [
+          "health"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "summary": "Readiness probe",
+        "tags": [
+          "health"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "List users",
+        "tags": [
+          "users"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "integer"
+            },
+            "in": "query",
+            "name": "page",
+            "required": false
+          },
+          {
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "integer"
+            },
+            "in": "query",
+            "name": "limit",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "meta"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "email",
+                          "name",
+                          "createdAt",
+                          "updatedAt"
+                        ],
+                        "properties": {
+                          "id": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "email": {
+                            "format": "email",
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "format": "date-time",
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "required": [
+                        "total",
+                        "page",
+                        "limit",
+                        "totalPages"
+                      ],
+                      "properties": {
+                        "total": {
+                          "type": "integer"
+                        },
+                        "page": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create user",
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "name"
+                ],
+                "properties": {
+                  "email": {
+                    "format": "email",
+                    "type": "string"
+                  },
+                  "name": {
+                    "minLength": 2,
+                    "maxLength": 255,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "email",
+                    "name",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "email": {
+                      "format": "email",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "statusCode",
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "statusCode": {
+                      "type": "integer"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Get user by ID",
+        "tags": [
+          "users"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "email",
+                    "name",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "email": {
+                      "format": "email",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "statusCode",
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "statusCode": {
+                      "type": "integer"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update user",
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "minLength": 2,
+                    "maxLength": 255,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "email",
+                    "name",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "email": {
+                      "format": "email",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "statusCode",
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "statusCode": {
+                      "type": "integer"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete user",
+        "tags": [
+          "users"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          },
+          "404": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "statusCode",
+                    "error",
+                    "message"
+                  ],
+                  "properties": {
+                    "statusCode": {
+                      "type": "integer"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/income": {
+      "get": {
+        "summary": "Receitas do mês",
+        "tags": [
+          "income"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "month",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "summary",
+                    "entries",
+                    "history",
+                    "sources"
+                  ],
+                  "properties": {
+                    "summary": {
+                      "type": "object",
+                      "required": [
+                        "totalReceived",
+                        "toReceive",
+                        "topSource"
+                      ],
+                      "properties": {
+                        "totalReceived": {
+                          "type": "object",
+                          "required": [
+                            "amount",
+                            "delta"
+                          ],
+                          "properties": {
+                            "amount": {
+                              "type": "integer"
+                            },
+                            "delta": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "unit",
+                                "direction"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                },
+                                "unit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "percent"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "pp"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "currency"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "direction": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "up"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "down"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "neutral"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "comparisonLabel": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "toReceive": {
+                          "type": "object",
+                          "required": [
+                            "amount",
+                            "pendingCount"
+                          ],
+                          "properties": {
+                            "amount": {
+                              "type": "integer"
+                            },
+                            "pendingCount": {
+                              "type": "integer"
+                            }
+                          }
+                        },
+                        "topSource": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "entries": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "date",
+                          "description",
+                          "category",
+                          "status",
+                          "amount"
+                        ],
+                        "properties": {
+                          "id": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "date": {
+                            "format": "date",
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "category": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "received"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "pending"
+                                ]
+                              }
+                            ]
+                          },
+                          "amount": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "history": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "label",
+                          "value"
+                        ],
+                        "properties": {
+                          "label": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "sources": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "amount",
+                          "percent"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "integer"
+                          },
+                          "percent": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/income/entries": {
+      "post": {
+        "summary": "Criar lançamento",
+        "tags": [
+          "income"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "description",
+                  "category"
+                ],
+                "properties": {
+                  "date": {
+                    "format": "date",
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "received"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "pending"
+                        ]
+                      }
+                    ]
+                  },
+                  "amount": {
+                    "type": "integer"
+                  },
+                  "daysWorked": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "hoursPerDay": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "hourlyRate": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "date",
+                    "description",
+                    "category",
+                    "status",
+                    "amount"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "date": {
+                      "format": "date",
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "received"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "pending"
+                          ]
+                        }
+                      ]
+                    },
+                    "amount": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/income/entries/{id}": {
+      "patch": {
+        "summary": "Atualizar lançamento",
+        "tags": [
+          "income"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "format": "date",
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "received"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "pending"
+                        ]
+                      }
+                    ]
+                  },
+                  "amount": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "date",
+                    "description",
+                    "category",
+                    "status",
+                    "amount"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "date": {
+                      "format": "date",
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "received"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "pending"
+                          ]
+                        }
+                      ]
+                    },
+                    "amount": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir lançamento",
+        "tags": [
+          "income"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/expenses/overview": {
+      "get": {
+        "summary": "Overview de despesas",
+        "tags": [
+          "expenses"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "month",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "summary",
+                    "byCategory",
+                    "recent"
+                  ],
+                  "properties": {
+                    "summary": {
+                      "type": "object",
+                      "required": [
+                        "totalSpent",
+                        "monthlyLimit"
+                      ],
+                      "properties": {
+                        "totalSpent": {
+                          "type": "object",
+                          "required": [
+                            "amount",
+                            "delta"
+                          ],
+                          "properties": {
+                            "amount": {
+                              "type": "number"
+                            },
+                            "delta": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "unit",
+                                "direction"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                },
+                                "unit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "percent"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "pp"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "currency"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "direction": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "up"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "down"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "neutral"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "comparisonLabel": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "monthlyLimit": {
+                          "type": "object",
+                          "required": [
+                            "limit",
+                            "spent",
+                            "remaining",
+                            "usedPercent"
+                          ],
+                          "properties": {
+                            "limit": {
+                              "type": "number"
+                            },
+                            "spent": {
+                              "type": "number"
+                            },
+                            "remaining": {
+                              "type": "number"
+                            },
+                            "usedPercent": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "byCategory": {
+                      "type": "object",
+                      "required": [
+                        "total",
+                        "items"
+                      ],
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "category",
+                              "amount",
+                              "percent"
+                            ],
+                            "properties": {
+                              "category": {
+                                "type": "string"
+                              },
+                              "amount": {
+                                "type": "number"
+                              },
+                              "percent": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "recent": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "description",
+                          "category",
+                          "date",
+                          "amount"
+                        ],
+                        "properties": {
+                          "id": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "category": {
+                            "type": "string"
+                          },
+                          "date": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/expenses/entries": {
+      "get": {
+        "summary": "Listar todas as despesas",
+        "tags": [
+          "expenses"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "date",
+                      "description",
+                      "category",
+                      "amount",
+                      "billingDate",
+                      "createdAt",
+                      "updatedAt"
+                    ],
+                    "properties": {
+                      "id": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "date": {
+                        "format": "date",
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "category": {
+                        "type": "string"
+                      },
+                      "paymentMethod": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "credit"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "debit"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "pix"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "cash"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "boleto"
+                            ]
+                          }
+                        ]
+                      },
+                      "amount": {
+                        "type": "number"
+                      },
+                      "billingDate": {
+                        "format": "date",
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "format": "date-time",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar lançamento",
+        "tags": [
+          "expenses"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "description",
+                  "category",
+                  "amount"
+                ],
+                "properties": {
+                  "date": {
+                    "format": "date",
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "paymentMethod": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "credit"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "debit"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "pix"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "cash"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "boleto"
+                        ]
+                      }
+                    ]
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "recurringMonths": {
+                    "minimum": 0,
+                    "maximum": 12,
+                    "type": "integer"
+                  },
+                  "installments": {
+                    "minimum": 1,
+                    "maximum": 48,
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "date",
+                    "description",
+                    "category",
+                    "amount",
+                    "billingDate",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "date": {
+                      "format": "date",
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "string"
+                    },
+                    "paymentMethod": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "credit"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "debit"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "pix"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "cash"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "boleto"
+                          ]
+                        }
+                      ]
+                    },
+                    "amount": {
+                      "type": "number"
+                    },
+                    "billingDate": {
+                      "format": "date",
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/expenses/entries/{id}": {
+      "patch": {
+        "summary": "Atualizar lançamento",
+        "tags": [
+          "expenses"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "format": "date",
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "paymentMethod": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "credit"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "debit"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "pix"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "cash"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "boleto"
+                        ]
+                      }
+                    ]
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "recurringMonths": {
+                    "minimum": 0,
+                    "maximum": 12,
+                    "type": "integer"
+                  },
+                  "installments": {
+                    "minimum": 1,
+                    "maximum": 48,
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "date",
+                    "description",
+                    "category",
+                    "amount",
+                    "billingDate",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "date": {
+                      "format": "date",
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "string"
+                    },
+                    "paymentMethod": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "credit"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "debit"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "pix"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "cash"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "boleto"
+                          ]
+                        }
+                      ]
+                    },
+                    "amount": {
+                      "type": "number"
+                    },
+                    "billingDate": {
+                      "format": "date",
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir lançamento",
+        "tags": [
+          "expenses"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/expenses/limit": {
+      "get": {
+        "summary": "Limite mensal",
+        "tags": [
+          "expenses"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "limit"
+                  ],
+                  "properties": {
+                    "limit": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar limite",
+        "tags": [
+          "expenses"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "limit"
+                ],
+                "properties": {
+                  "limit": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "limit"
+                  ],
+                  "properties": {
+                    "limit": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/investments": {
+      "get": {
+        "summary": "Obter resumo de investimentos",
+        "tags": [
+          "investments"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "range",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "summary",
+                    "allocation",
+                    "evolution",
+                    "assets"
+                  ],
+                  "properties": {
+                    "summary": {
+                      "type": "object",
+                      "required": [
+                        "investedNetWorth",
+                        "monthlyYield",
+                        "yearlyYield"
+                      ],
+                      "properties": {
+                        "investedNetWorth": {
+                          "type": "object",
+                          "required": [
+                            "amount",
+                            "delta"
+                          ],
+                          "properties": {
+                            "amount": {
+                              "type": "number"
+                            },
+                            "delta": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "unit",
+                                "direction"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                },
+                                "unit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "percent"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "pp"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "currency"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "direction": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "up"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "down"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "neutral"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "comparisonLabel": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "monthlyYield": {
+                          "type": "object",
+                          "required": [
+                            "amount",
+                            "delta"
+                          ],
+                          "properties": {
+                            "amount": {
+                              "type": "number"
+                            },
+                            "delta": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "unit",
+                                "direction"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                },
+                                "unit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "percent"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "pp"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "currency"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "direction": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "up"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "down"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "neutral"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "comparisonLabel": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "yearlyYield": {
+                          "type": "object",
+                          "required": [
+                            "amount",
+                            "returnPercentYtd"
+                          ],
+                          "properties": {
+                            "amount": {
+                              "type": "number"
+                            },
+                            "returnPercentYtd": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "allocation": {
+                      "type": "object",
+                      "required": [
+                        "total",
+                        "items"
+                      ],
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "assetClass",
+                              "percent"
+                            ],
+                            "properties": {
+                              "assetClass": {
+                                "type": "string"
+                              },
+                              "percent": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "evolution": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "label",
+                          "value"
+                        ],
+                        "properties": {
+                          "label": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "assets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "assetClass",
+                          "currentBalance",
+                          "weightPercent",
+                          "monthlyYield",
+                          "createdAt",
+                          "updatedAt"
+                        ],
+                        "properties": {
+                          "id": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "assetClass": {
+                            "type": "string"
+                          },
+                          "subtitle": {
+                            "type": "string"
+                          },
+                          "currentBalance": {
+                            "type": "number"
+                          },
+                          "weightPercent": {
+                            "type": "number"
+                          },
+                          "monthlyYield": {
+                            "type": "object",
+                            "required": [
+                              "amount",
+                              "percent"
+                            ],
+                            "properties": {
+                              "amount": {
+                                "type": "number"
+                              },
+                              "percent": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "totalInvested": {
+                            "type": "number"
+                          },
+                          "averagePrice": {
+                            "type": "number"
+                          },
+                          "createdAt": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "format": "date-time",
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/investments/assets": {
+      "post": {
+        "summary": "Criar ativo",
+        "tags": [
+          "investments"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "assetClass",
+                  "currentBalance"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "assetClass": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "currentBalance": {
+                    "type": "number"
+                  },
+                  "totalInvested": {
+                    "type": "number"
+                  },
+                  "averagePrice": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "assetClass",
+                    "currentBalance",
+                    "weightPercent",
+                    "monthlyYield",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "assetClass": {
+                      "type": "string"
+                    },
+                    "subtitle": {
+                      "type": "string"
+                    },
+                    "currentBalance": {
+                      "type": "number"
+                    },
+                    "weightPercent": {
+                      "type": "number"
+                    },
+                    "monthlyYield": {
+                      "type": "object",
+                      "required": [
+                        "amount",
+                        "percent"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": "number"
+                        },
+                        "percent": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "totalInvested": {
+                      "type": "number"
+                    },
+                    "averagePrice": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/investments/assets/{id}": {
+      "patch": {
+        "summary": "Atualizar ativo",
+        "tags": [
+          "investments"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "assetClass": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "currentBalance": {
+                    "type": "number"
+                  },
+                  "totalInvested": {
+                    "type": "number"
+                  },
+                  "averagePrice": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "assetClass",
+                    "currentBalance",
+                    "weightPercent",
+                    "monthlyYield",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "assetClass": {
+                      "type": "string"
+                    },
+                    "subtitle": {
+                      "type": "string"
+                    },
+                    "currentBalance": {
+                      "type": "number"
+                    },
+                    "weightPercent": {
+                      "type": "number"
+                    },
+                    "monthlyYield": {
+                      "type": "object",
+                      "required": [
+                        "amount",
+                        "percent"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": "number"
+                        },
+                        "percent": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "totalInvested": {
+                      "type": "number"
+                    },
+                    "averagePrice": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remover ativo",
+        "tags": [
+          "investments"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/goals": {
+      "get": {
+        "summary": "Listar metas",
+        "tags": [
+          "goals"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "summary",
+                    "goals"
+                  ],
+                  "properties": {
+                    "summary": {
+                      "type": "object",
+                      "required": [
+                        "activeCount",
+                        "completedCount",
+                        "totalSaved"
+                      ],
+                      "properties": {
+                        "activeCount": {
+                          "type": "integer"
+                        },
+                        "completedCount": {
+                          "type": "integer"
+                        },
+                        "totalSaved": {
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "goals": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "priority",
+                          "status",
+                          "currentAmount",
+                          "targetAmount",
+                          "progressPercent",
+                          "remaining",
+                          "forecastDate",
+                          "icon",
+                          "color",
+                          "createdAt",
+                          "updatedAt"
+                        ],
+                        "properties": {
+                          "id": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "priority": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "high"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "medium"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "low"
+                                ]
+                              }
+                            ]
+                          },
+                          "status": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "active"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "completed"
+                                ]
+                              }
+                            ]
+                          },
+                          "currentAmount": {
+                            "type": "integer"
+                          },
+                          "targetAmount": {
+                            "type": "integer"
+                          },
+                          "progressPercent": {
+                            "type": "number"
+                          },
+                          "remaining": {
+                            "type": "integer"
+                          },
+                          "forecastDate": {
+                            "type": "string"
+                          },
+                          "icon": {
+                            "type": "string"
+                          },
+                          "color": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "format": "date-time",
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar meta",
+        "tags": [
+          "goals"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "priority",
+                  "targetAmount",
+                  "currentAmount",
+                  "icon",
+                  "color"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "priority": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "high"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "medium"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "low"
+                        ]
+                      }
+                    ]
+                  },
+                  "targetAmount": {
+                    "type": "integer"
+                  },
+                  "currentAmount": {
+                    "type": "integer"
+                  },
+                  "icon": {
+                    "type": "string"
+                  },
+                  "color": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "priority",
+                    "status",
+                    "currentAmount",
+                    "targetAmount",
+                    "progressPercent",
+                    "remaining",
+                    "forecastDate",
+                    "icon",
+                    "color",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "priority": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "high"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "medium"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "low"
+                          ]
+                        }
+                      ]
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "active"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "completed"
+                          ]
+                        }
+                      ]
+                    },
+                    "currentAmount": {
+                      "type": "integer"
+                    },
+                    "targetAmount": {
+                      "type": "integer"
+                    },
+                    "progressPercent": {
+                      "type": "number"
+                    },
+                    "remaining": {
+                      "type": "integer"
+                    },
+                    "forecastDate": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string"
+                    },
+                    "color": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/goals/{id}": {
+      "patch": {
+        "summary": "Atualizar meta",
+        "tags": [
+          "goals"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "priority": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "high"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "medium"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "low"
+                        ]
+                      }
+                    ]
+                  },
+                  "targetAmount": {
+                    "type": "integer"
+                  },
+                  "currentAmount": {
+                    "type": "integer"
+                  },
+                  "icon": {
+                    "type": "string"
+                  },
+                  "color": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "priority",
+                    "status",
+                    "currentAmount",
+                    "targetAmount",
+                    "progressPercent",
+                    "remaining",
+                    "forecastDate",
+                    "icon",
+                    "color",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "priority": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "high"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "medium"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "low"
+                          ]
+                        }
+                      ]
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "active"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "completed"
+                          ]
+                        }
+                      ]
+                    },
+                    "currentAmount": {
+                      "type": "integer"
+                    },
+                    "targetAmount": {
+                      "type": "integer"
+                    },
+                    "progressPercent": {
+                      "type": "number"
+                    },
+                    "remaining": {
+                      "type": "integer"
+                    },
+                    "forecastDate": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string"
+                    },
+                    "color": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir meta",
+        "tags": [
+          "goals"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/goals/{id}/deposit": {
+      "post": {
+        "summary": "Adicionar aporte à meta",
+        "tags": [
+          "goals"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "amount"
+                ],
+                "properties": {
+                  "amount": {
+                    "minimum": 1,
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "priority",
+                    "status",
+                    "currentAmount",
+                    "targetAmount",
+                    "progressPercent",
+                    "remaining",
+                    "forecastDate",
+                    "icon",
+                    "color",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "priority": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "high"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "medium"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "low"
+                          ]
+                        }
+                      ]
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "active"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "completed"
+                          ]
+                        }
+                      ]
+                    },
+                    "currentAmount": {
+                      "type": "integer"
+                    },
+                    "targetAmount": {
+                      "type": "integer"
+                    },
+                    "progressPercent": {
+                      "type": "number"
+                    },
+                    "remaining": {
+                      "type": "integer"
+                    },
+                    "forecastDate": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string"
+                    },
+                    "color": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "tags": [
+          "auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "format": "email",
+                    "type": "string"
+                  },
+                  "password": {
+                    "minLength": 6,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "user",
+                    "token",
+                    "expiresAt"
+                  ],
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "required": [
+                        "id",
+                        "name",
+                        "email"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "token": {
+                      "type": "string"
+                    },
+                    "expiresAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Logout",
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "Usuário autenticado",
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "email"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "avatarUrl": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/net-worth": {
+      "get": {
+        "summary": "Patrimônio líquido",
+        "tags": [
+          "net-worth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "amount",
+                    "changePercent",
+                    "changeLabel",
+                    "sparkline",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "amount": {
+                      "type": "number"
+                    },
+                    "changePercent": {
+                      "type": "number"
+                    },
+                    "changeLabel": {
+                      "type": "string"
+                    },
+                    "sparkline": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      }
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/overview": {
+      "get": {
+        "summary": "Visão geral",
+        "tags": [
+          "overview"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "pattern": "^\\d{4}-\\d{2}$",
+              "type": "string"
+            },
+            "in": "query",
+            "name": "month",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "metrics",
+                    "monthlyFlow",
+                    "expensesByCategory",
+                    "incomeBySource",
+                    "goals",
+                    "investment",
+                    "quickStats"
+                  ],
+                  "properties": {
+                    "metrics": {
+                      "type": "object",
+                      "required": [
+                        "totalIncome",
+                        "totalExpenses",
+                        "monthlyBalance",
+                        "savingsRate"
+                      ],
+                      "properties": {
+                        "totalIncome": {
+                          "type": "object",
+                          "required": [
+                            "value",
+                            "delta"
+                          ],
+                          "properties": {
+                            "value": {
+                              "type": "number"
+                            },
+                            "delta": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "unit",
+                                "direction"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                },
+                                "unit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "percent"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "pp"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "brl"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "direction": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "up"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "down"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "comparisonLabel": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "totalExpenses": {
+                          "type": "object",
+                          "required": [
+                            "value",
+                            "delta"
+                          ],
+                          "properties": {
+                            "value": {
+                              "type": "number"
+                            },
+                            "delta": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "unit",
+                                "direction"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                },
+                                "unit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "percent"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "pp"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "brl"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "direction": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "up"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "down"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "comparisonLabel": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "monthlyBalance": {
+                          "type": "object",
+                          "required": [
+                            "value",
+                            "delta"
+                          ],
+                          "properties": {
+                            "value": {
+                              "type": "number"
+                            },
+                            "delta": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "unit",
+                                "direction"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                },
+                                "unit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "percent"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "pp"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "brl"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "direction": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "up"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "down"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "comparisonLabel": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "savingsRate": {
+                          "type": "object",
+                          "required": [
+                            "value",
+                            "delta"
+                          ],
+                          "properties": {
+                            "value": {
+                              "type": "number"
+                            },
+                            "delta": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "unit",
+                                "direction"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                },
+                                "unit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "percent"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "pp"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "brl"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "direction": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "up"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "down"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "comparisonLabel": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "monthlyFlow": {
+                      "type": "object",
+                      "required": [
+                        "income",
+                        "expenses",
+                        "balance"
+                      ],
+                      "properties": {
+                        "income": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "label",
+                            "color",
+                            "points"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "color": {
+                              "type": "string"
+                            },
+                            "points": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "label",
+                                  "value"
+                                ],
+                                "properties": {
+                                  "label": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "number"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "expenses": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "label",
+                            "color",
+                            "points"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "color": {
+                              "type": "string"
+                            },
+                            "points": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "label",
+                                  "value"
+                                ],
+                                "properties": {
+                                  "label": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "number"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "balance": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "label",
+                            "color",
+                            "points"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "color": {
+                              "type": "string"
+                            },
+                            "points": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "label",
+                                  "value"
+                                ],
+                                "properties": {
+                                  "label": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "number"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "nextMonthPreview": {
+                          "type": "object",
+                          "required": [
+                            "label",
+                            "income"
+                          ],
+                          "properties": {
+                            "label": {
+                              "type": "string"
+                            },
+                            "income": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "expensesByCategory": {
+                      "type": "object",
+                      "required": [
+                        "total",
+                        "items"
+                      ],
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "category",
+                              "amount",
+                              "percent"
+                            ],
+                            "properties": {
+                              "category": {
+                                "type": "string"
+                              },
+                              "amount": {
+                                "type": "number"
+                              },
+                              "percent": {
+                                "type": "number"
+                              },
+                              "color": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "incomeBySource": {
+                      "type": "object",
+                      "required": [
+                        "total",
+                        "items"
+                      ],
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "source",
+                              "amount",
+                              "percent"
+                            ],
+                            "properties": {
+                              "source": {
+                                "type": "string"
+                              },
+                              "amount": {
+                                "type": "number"
+                              },
+                              "percent": {
+                                "type": "number"
+                              },
+                              "indicatorClassName": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "goals": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "currentAmount",
+                          "targetAmount",
+                          "progressPercent",
+                          "indicatorClassName",
+                          "iconClassName"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "currentAmount": {
+                            "type": "number"
+                          },
+                          "targetAmount": {
+                            "type": "number"
+                          },
+                          "progressPercent": {
+                            "type": "number"
+                          },
+                          "indicatorClassName": {
+                            "type": "string"
+                          },
+                          "iconClassName": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "investment": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "indexLabel",
+                        "balance",
+                        "monthChange",
+                        "monthYield",
+                        "yearYield"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "indexLabel": {
+                          "type": "string"
+                        },
+                        "balance": {
+                          "type": "number"
+                        },
+                        "monthChange": {
+                          "type": "object",
+                          "required": [
+                            "amount",
+                            "percent"
+                          ],
+                          "properties": {
+                            "amount": {
+                              "type": "number"
+                            },
+                            "percent": {
+                              "type": "number"
+                            }
+                          }
+                        },
+                        "monthYield": {
+                          "type": "number"
+                        },
+                        "yearYield": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "quickStats": {
+                      "type": "object",
+                      "required": [
+                        "averageDailySpend",
+                        "largestExpense",
+                        "daysRemaining",
+                        "averageDailySurplus"
+                      ],
+                      "properties": {
+                        "averageDailySpend": {
+                          "type": "number"
+                        },
+                        "largestExpense": {
+                          "type": "object",
+                          "required": [
+                            "amount",
+                            "category"
+                          ],
+                          "properties": {
+                            "amount": {
+                              "type": "number"
+                            },
+                            "category": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "daysRemaining": {
+                          "type": "number"
+                        },
+                        "averageDailySurplus": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports": {
+      "get": {
+        "summary": "Relatórios",
+        "tags": [
+          "reports"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "range",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "from",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "to",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "accounts",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "categories",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "filters",
+                    "incomeVsExpense",
+                    "kpis",
+                    "expensesByCategory",
+                    "monthlySummary"
+                  ],
+                  "properties": {
+                    "filters": {
+                      "type": "object",
+                      "required": [
+                        "range",
+                        "accounts",
+                        "categories"
+                      ],
+                      "properties": {
+                        "range": {
+                          "type": "string"
+                        },
+                        "accounts": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "categories": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "incomeVsExpense": {
+                      "type": "object",
+                      "required": [
+                        "income",
+                        "expenses"
+                      ],
+                      "properties": {
+                        "income": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "label",
+                            "points"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "points": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "label",
+                                  "value"
+                                ],
+                                "properties": {
+                                  "label": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "number"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "expenses": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "label",
+                            "points"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "points": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "label",
+                                  "value"
+                                ],
+                                "properties": {
+                                  "label": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "type": "number"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "kpis": {
+                      "type": "object",
+                      "required": [
+                        "averageIncome",
+                        "averageExpense",
+                        "averageSavingsRate"
+                      ],
+                      "properties": {
+                        "averageIncome": {
+                          "type": "object",
+                          "required": [
+                            "amount",
+                            "delta"
+                          ],
+                          "properties": {
+                            "amount": {
+                              "type": "number"
+                            },
+                            "delta": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "unit",
+                                "direction"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                },
+                                "unit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "percent"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "pp"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "currency"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "direction": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "up"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "down"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "neutral"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "comparisonLabel": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "averageExpense": {
+                          "type": "object",
+                          "required": [
+                            "amount",
+                            "delta"
+                          ],
+                          "properties": {
+                            "amount": {
+                              "type": "number"
+                            },
+                            "delta": {
+                              "type": "object",
+                              "required": [
+                                "value",
+                                "unit",
+                                "direction"
+                              ],
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                },
+                                "unit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "percent"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "pp"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "currency"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "direction": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "up"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "down"
+                                      ]
+                                    },
+                                    {
+                                      "type": "string",
+                                      "enum": [
+                                        "neutral"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "comparisonLabel": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "averageSavingsRate": {
+                          "type": "object",
+                          "required": [
+                            "percent",
+                            "targetPercent"
+                          ],
+                          "properties": {
+                            "percent": {
+                              "type": "number"
+                            },
+                            "targetPercent": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "expensesByCategory": {
+                      "type": "object",
+                      "required": [
+                        "total",
+                        "items"
+                      ],
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "category",
+                              "amount",
+                              "percent"
+                            ],
+                            "properties": {
+                              "category": {
+                                "type": "string"
+                              },
+                              "amount": {
+                                "type": "number"
+                              },
+                              "percent": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "monthlySummary": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "period",
+                          "income",
+                          "expenses",
+                          "balance"
+                        ],
+                        "properties": {
+                          "period": {
+                            "type": "string"
+                          },
+                          "income": {
+                            "type": "number"
+                          },
+                          "expenses": {
+                            "type": "number"
+                          },
+                          "balance": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projections": {
+      "get": {
+        "summary": "Projeção patrimonial",
+        "tags": [
+          "projections"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "timeframe",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "summary",
+                    "timeframe",
+                    "scenarios",
+                    "assumptions",
+                    "compositionAtHorizon"
+                  ],
+                  "properties": {
+                    "summary": {
+                      "type": "object",
+                      "required": [
+                        "initialNetWorth",
+                        "plannedMonthlyContribution",
+                        "estimatedAnnualRatePercent",
+                        "projectionIn10Years"
+                      ],
+                      "properties": {
+                        "initialNetWorth": {
+                          "type": "number"
+                        },
+                        "plannedMonthlyContribution": {
+                          "type": "integer"
+                        },
+                        "estimatedAnnualRatePercent": {
+                          "type": "number"
+                        },
+                        "projectionIn10Years": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "timeframe": {
+                      "type": "integer"
+                    },
+                    "scenarios": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "type",
+                          "points"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "base"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "conservative"
+                                ]
+                              },
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "aggressive"
+                                ]
+                              }
+                            ]
+                          },
+                          "points": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "label",
+                                "value"
+                              ],
+                              "properties": {
+                                "label": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "number"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "assumptions": {
+                      "type": "object",
+                      "required": [
+                        "inflationPercent",
+                        "contributionGrowthPercent",
+                        "returnsByClass"
+                      ],
+                      "properties": {
+                        "inflationPercent": {
+                          "type": "number"
+                        },
+                        "contributionGrowthPercent": {
+                          "type": "number"
+                        },
+                        "returnsByClass": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "assetClass",
+                              "annualRatePercent"
+                            ],
+                            "properties": {
+                              "assetClass": {
+                                "type": "string"
+                              },
+                              "annualRatePercent": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "compositionAtHorizon": {
+                      "type": "object",
+                      "required": [
+                        "total",
+                        "items"
+                      ],
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "assetClass",
+                              "amount",
+                              "percent"
+                            ],
+                            "properties": {
+                              "assetClass": {
+                                "type": "string"
+                              },
+                              "amount": {
+                                "type": "number"
+                              },
+                              "percent": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projections/assumptions": {
+      "put": {
+        "summary": "Atualizar premissas",
+        "tags": [
+          "projections"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "plannedMonthlyContribution",
+                  "estimatedAnnualRatePercent",
+                  "inflationPercent",
+                  "contributionGrowthPercent",
+                  "returnsByClass"
+                ],
+                "properties": {
+                  "plannedMonthlyContribution": {
+                    "type": "integer"
+                  },
+                  "estimatedAnnualRatePercent": {
+                    "type": "number"
+                  },
+                  "inflationPercent": {
+                    "type": "number"
+                  },
+                  "contributionGrowthPercent": {
+                    "type": "number"
+                  },
+                  "returnsByClass": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "assetClass",
+                        "annualRatePercent"
+                      ],
+                      "properties": {
+                        "assetClass": {
+                          "type": "string"
+                        },
+                        "annualRatePercent": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "plannedMonthlyContribution",
+                    "estimatedAnnualRatePercent",
+                    "inflationPercent",
+                    "contributionGrowthPercent",
+                    "returnsByClass"
+                  ],
+                  "properties": {
+                    "plannedMonthlyContribution": {
+                      "type": "integer"
+                    },
+                    "estimatedAnnualRatePercent": {
+                      "type": "number"
+                    },
+                    "inflationPercent": {
+                      "type": "number"
+                    },
+                    "contributionGrowthPercent": {
+                      "type": "number"
+                    },
+                    "returnsByClass": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "assetClass",
+                          "annualRatePercent"
+                        ],
+                        "properties": {
+                          "assetClass": {
+                            "type": "string"
+                          },
+                          "annualRatePercent": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settings": {
+      "get": {
+        "summary": "Configurações",
+        "tags": [
+          "settings"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "profile",
+                    "security",
+                    "preferences",
+                    "notifications",
+                    "card",
+                    "appInfo"
+                  ],
+                  "properties": {
+                    "profile": {
+                      "type": "object",
+                      "required": [
+                        "fullName",
+                        "email"
+                      ],
+                      "properties": {
+                        "fullName": {
+                          "type": "string"
+                        },
+                        "birthDate": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "security": {
+                      "type": "object",
+                      "required": [
+                        "twoFactor",
+                        "passwordLastChanged"
+                      ],
+                      "properties": {
+                        "twoFactor": {
+                          "type": "object",
+                          "required": [
+                            "enabled"
+                          ],
+                          "properties": {
+                            "enabled": {
+                              "type": "boolean"
+                            },
+                            "method": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "passwordLastChanged": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "required": [
+                        "theme",
+                        "currency"
+                      ],
+                      "properties": {
+                        "theme": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "dark"
+                              ]
+                            },
+                            {
+                              "type": "string",
+                              "enum": [
+                                "light"
+                              ]
+                            },
+                            {
+                              "type": "string",
+                              "enum": [
+                                "system"
+                              ]
+                            }
+                          ]
+                        },
+                        "currency": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "enum": [
+                                "BRL"
+                              ]
+                            },
+                            {
+                              "type": "string",
+                              "enum": [
+                                "USD"
+                              ]
+                            },
+                            {
+                              "type": "string",
+                              "enum": [
+                                "EUR"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "notifications": {
+                      "type": "object",
+                      "required": [
+                        "weeklyDigest",
+                        "dueDateAlerts",
+                        "goalsAchieved"
+                      ],
+                      "properties": {
+                        "weeklyDigest": {
+                          "type": "boolean"
+                        },
+                        "dueDateAlerts": {
+                          "type": "boolean"
+                        },
+                        "goalsAchieved": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "card": {
+                      "type": "object",
+                      "properties": {
+                        "closingDay": {
+                          "type": "integer"
+                        },
+                        "dueDay": {
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "appInfo": {
+                      "type": "object",
+                      "required": [
+                        "version",
+                        "build"
+                      ],
+                      "properties": {
+                        "version": {
+                          "type": "string"
+                        },
+                        "build": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settings/profile": {
+      "patch": {
+        "summary": "Atualizar perfil",
+        "tags": [
+          "settings"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullName": {
+                    "type": "string"
+                  },
+                  "birthDate": {
+                    "type": "string"
+                  },
+                  "avatarUrl": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/settings/preferences": {
+      "patch": {
+        "summary": "Atualizar preferências",
+        "tags": [
+          "settings"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "theme": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "dark"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "light"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "system"
+                        ]
+                      }
+                    ]
+                  },
+                  "currency": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "BRL"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "USD"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "EUR"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/settings/notifications": {
+      "patch": {
+        "summary": "Atualizar notificações",
+        "tags": [
+          "settings"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "weeklyDigest": {
+                    "type": "boolean"
+                  },
+                  "dueDateAlerts": {
+                    "type": "boolean"
+                  },
+                  "goalsAchieved": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/settings/card": {
+      "patch": {
+        "summary": "Configurar cartão (fechamento/vencimento)",
+        "tags": [
+          "settings"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "closingDay": {
+                    "minimum": 1,
+                    "maximum": 31,
+                    "type": "integer"
+                  },
+                  "dueDay": {
+                    "minimum": 1,
+                    "maximum": 31,
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/settings/security/two-factor": {
+      "patch": {
+        "summary": "Configurar 2FA",
+        "tags": [
+          "settings"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "enabled"
+                ],
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "method": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/settings/security/change-password": {
+      "post": {
+        "summary": "Trocar senha",
+        "tags": [
+          "settings"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "currentPassword",
+                  "newPassword"
+                ],
+                "properties": {
+                  "currentPassword": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Listar categorias",
+        "tags": [
+          "categories"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "income"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "enum": [
+                    "expense"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "enum": [
+                    "both"
+                  ]
+                }
+              ]
+            },
+            "in": "query",
+            "name": "type",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "type",
+                      "createdAt",
+                      "updatedAt"
+                    ],
+                    "properties": {
+                      "id": {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "income"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "expense"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "both"
+                            ]
+                          }
+                        ]
+                      },
+                      "color": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "format": "date-time",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar categoria",
+        "tags": [
+          "categories"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "type": "string"
+                  },
+                  "type": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "income"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "expense"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "both"
+                        ]
+                      }
+                    ]
+                  },
+                  "color": {
+                    "maxLength": 20,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "type",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "income"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "expense"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "both"
+                          ]
+                        }
+                      ]
+                    },
+                    "color": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "patch": {
+        "summary": "Atualizar categoria",
+        "tags": [
+          "categories"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "type": "string"
+                  },
+                  "type": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "income"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "expense"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "both"
+                        ]
+                      }
+                    ]
+                  },
+                  "color": {
+                    "maxLength": 20,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "type",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "income"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "expense"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "both"
+                          ]
+                        }
+                      ]
+                    },
+                    "color": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remover categoria",
+        "tags": [
+          "categories"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Default Response"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
