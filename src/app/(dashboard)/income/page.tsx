@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 
 import { PageHeader } from "@/components/page-header";
+import { MonthNavigator, currentMonth } from "@/components/month-navigator";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,6 +18,7 @@ import { DeltaBadge } from "@/components/delta-badge";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import { useIncome, useDeleteIncomeEntry } from "@/features/income/api";
+import { useReports } from "@/features/reports/api";
 import {
   IncomeEntryDialog,
   type IncomeEntry,
@@ -25,8 +27,14 @@ import { IncomeEntriesTable } from "@/features/income/components/income-entries-
 import { IncomeHistoryChart } from "@/features/income/components/income-history-chart";
 
 export default function IncomePage() {
-  const { data, isLoading, isError, error } = useIncome();
+  const [month, setMonth] = useState(currentMonth());
+  const { data, isLoading, isError, error } = useIncome(month);
+  // O history do /income só reporta o mês pedido (zera os anteriores), então a
+  // série multi-mês real vem do /reports (incomeVsExpense.income).
+  const reports = useReports();
   const del = useDeleteIncomeEntry();
+
+  const historySeries = reports.data?.incomeVsExpense.income.points ?? [];
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<IncomeEntry | null>(null);
@@ -47,10 +55,13 @@ export default function IncomePage() {
         title="Receitas"
         description="Lançamentos e fontes de receita do mês"
         action={
-          <Button onClick={openNew}>
-            <Plus className="size-4" />
-            Nova receita
-          </Button>
+          <div className="flex items-center gap-2">
+            <MonthNavigator value={month} onChange={setMonth} />
+            <Button onClick={openNew}>
+              <Plus className="size-4" />
+              Nova receita
+            </Button>
+          </div>
         }
       />
 
@@ -82,9 +93,7 @@ export default function IncomePage() {
               </CardHeader>
               <CardContent className="space-y-1">
                 <div className="text-2xl font-semibold">
-                  {formatCurrency(data.summary.totalReceived.amount, {
-                    cents: true,
-                  })}
+                  {formatCurrency(data.summary.totalReceived.amount)}
                 </div>
                 <DeltaBadge delta={data.summary.totalReceived.delta} />
               </CardContent>
@@ -97,9 +106,7 @@ export default function IncomePage() {
               </CardHeader>
               <CardContent className="space-y-1">
                 <div className="text-2xl font-semibold">
-                  {formatCurrency(data.summary.toReceive.amount, {
-                    cents: true,
-                  })}
+                  {formatCurrency(data.summary.toReceive.amount)}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   {data.summary.toReceive.pendingCount} lançamento(s) pendente(s)
@@ -126,7 +133,7 @@ export default function IncomePage() {
                 <CardTitle>Histórico</CardTitle>
               </CardHeader>
               <CardContent>
-                <IncomeHistoryChart history={data.history} />
+                <IncomeHistoryChart history={historySeries} />
               </CardContent>
             </Card>
             <Card>
@@ -144,7 +151,7 @@ export default function IncomePage() {
                     <div className="flex items-center justify-between text-sm">
                       <span className="truncate">{source.name}</span>
                       <span className="font-medium">
-                        {formatCurrency(source.amount, { cents: true })}
+                        {formatCurrency(source.amount)}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
