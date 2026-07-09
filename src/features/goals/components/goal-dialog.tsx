@@ -91,8 +91,8 @@ export function GoalDialog({
             priority: goal.priority,
             icon: goal.icon,
             color: goal.color,
-            targetReais: goal.targetAmount / 100,
-            currentReais: goal.currentAmount / 100,
+            targetReais: goal.targetAmount,
+            currentReais: goal.currentAmount,
           }
         : {
             name: "",
@@ -113,8 +113,8 @@ export function GoalDialog({
       priority: values.priority,
       icon: values.icon,
       color: values.color,
-      targetAmount: Math.round(values.targetReais * 100),
-      currentAmount: Math.round(values.currentReais * 100),
+      targetAmount: Math.round(values.targetReais),
+      currentAmount: Math.round(values.currentReais),
     };
     const onError = (e: unknown) =>
       toast.error(e instanceof Error ? e.message : "Erro ao salvar");

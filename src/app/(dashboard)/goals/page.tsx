@@ -80,7 +80,7 @@ export default function GoalsPage() {
             />
             <SummaryTile
               label="Total guardado"
-              value={formatCurrency(data.summary.totalSaved, { cents: true })}
+              value={formatCurrency(data.summary.totalSaved)}
             />
           </div>
 
@@ -146,17 +146,17 @@ export default function GoalsPage() {
                   <CardContent className="space-y-3">
                     <div className="flex items-baseline justify-between text-sm">
                       <span className="font-semibold">
-                        {formatCurrency(goal.currentAmount, { cents: true })}
+                        {formatCurrency(goal.currentAmount)}
                       </span>
                       <span className="text-muted-foreground">
-                        {formatCurrency(goal.targetAmount, { cents: true })}
+                        {formatCurrency(goal.targetAmount)}
                       </span>
                     </div>
                     <Progress value={goal.progressPercent} className="h-2" />
                     <div className="flex justify-between text-xs text-muted-foreground">
                       <span>{formatPercent(goal.progressPercent, 0)}</span>
                       <span>
-                        Faltam {formatCurrency(goal.remaining, { cents: true })}
+                        Faltam {formatCurrency(goal.remaining)}
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground">

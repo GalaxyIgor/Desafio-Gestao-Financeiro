@@ -48,7 +48,7 @@ export function DepositDialog({
   function onSubmit(values: DepositValues) {
     if (!goal) return;
     deposit.mutate(
-      { id: goal.id, amount: Math.round(values.amountReais * 100) },
+      { id: goal.id, amount: Math.round(values.amountReais) },
       {
         onSuccess: () => {
           toast.success("Aporte registrado");

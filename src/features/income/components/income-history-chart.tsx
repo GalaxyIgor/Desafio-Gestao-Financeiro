@@ -19,13 +19,19 @@ export function IncomeHistoryChart({
 }: {
   history: { label: string; value: number }[];
 }) {
-  const rows = history.map((h) => ({ label: h.label, value: h.value / 100 }));
+  const rows = history.map((h) => ({ label: h.label, value: h.value }));
 
   return (
     <ChartContainer config={chartConfig} className="h-[240px] w-full">
       <BarChart data={rows} margin={{ left: 4, right: 8, top: 8 }}>
         <CartesianGrid vertical={false} />
-        <XAxis dataKey="label" tickLine={false} axisLine={false} tickMargin={8} />
+        <XAxis
+          dataKey="label"
+          tickLine={false}
+          axisLine={false}
+          tickMargin={8}
+          interval={0}
+        />
         <YAxis
           tickLine={false}
           axisLine={false}
