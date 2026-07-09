@@ -80,9 +80,15 @@ export function AppHeader() {
         <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger
-            render={<Button variant="ghost" size="icon" className="rounded-full" />}
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full transition-transform hover:bg-transparent active:scale-90 motion-reduce:transform-none"
+              />
+            }
           >
-            <Avatar className="size-8">
+            <Avatar className="size-8 ring-offset-2 ring-offset-background transition-all duration-200 hover:scale-110 hover:ring-2 hover:ring-primary/50 motion-reduce:transform-none">
               <AvatarFallback>{initials(user?.name)}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
