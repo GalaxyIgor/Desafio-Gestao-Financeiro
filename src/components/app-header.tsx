@@ -24,7 +24,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useMe, useLogout } from "@/features/auth/api";
 import { useNetWorth } from "@/features/net-worth/api";
 import { formatCurrency, formatPercent } from "@/lib/format";
-import { cn } from "@/lib/utils";
+import { cn, interactiveCard } from "@/lib/utils";
 
 function NetWorthPill() {
   const { data, isLoading, isError } = useNetWorth();
@@ -34,7 +34,14 @@ function NetWorthPill() {
 
   const up = data.changePercent >= 0;
   return (
-    <div className="hidden items-center gap-2 rounded-lg border bg-card px-3 py-1.5 sm:flex">
+    <Link
+      href="/reports"
+      title="Ver relatórios"
+      className={cn(
+        "hidden items-center gap-2 rounded-lg border bg-card px-3 py-1.5 sm:flex",
+        interactiveCard,
+      )}
+    >
       <span className="text-xs text-muted-foreground">Patrimônio</span>
       <span className="text-sm font-semibold">{formatCurrency(data.amount)}</span>
       <span
@@ -46,7 +53,7 @@ function NetWorthPill() {
         {up ? <TrendingUp className="size-3" /> : <TrendingDown className="size-3" />}
         {formatPercent(Math.abs(data.changePercent))}
       </span>
-    </div>
+    </Link>
   );
 }
 

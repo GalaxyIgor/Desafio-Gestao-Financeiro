@@ -23,6 +23,7 @@ import { useOverview } from "@/features/overview/api";
 import { MonthlyFlowChart } from "@/features/overview/components/monthly-flow-chart";
 import { BreakdownCard } from "@/features/overview/components/breakdown-card";
 import { formatCurrency, formatPercent } from "@/lib/format";
+import { interactiveCard } from "@/lib/utils";
 
 export default function OverviewPage() {
   const { data, isLoading, isError, error } = useOverview();
@@ -128,7 +129,7 @@ function InvestmentCard({
   const up = investment.monthChange.percent >= 0;
   return (
     <Link href="/investments" className="block">
-      <Card className="h-full cursor-pointer transition-colors hover:border-primary/40 hover:bg-muted/40">
+      <Card className={`h-full ${interactiveCard}`}>
         <CardHeader>
           <CardTitle>{investment.name}</CardTitle>
           <CardDescription>{investment.indexLabel}</CardDescription>
@@ -169,7 +170,7 @@ function GoalsCard({
 }) {
   return (
     <Link href="/goals" className="block">
-      <Card className="h-full cursor-pointer transition-colors hover:border-primary/40 hover:bg-muted/40">
+      <Card className={`h-full ${interactiveCard}`}>
         <CardHeader>
         <CardTitle>Metas</CardTitle>
       </CardHeader>
@@ -214,7 +215,7 @@ function QuickStatsCard({
   ];
   return (
     <Link href="/reports" className="block">
-      <Card className="h-full cursor-pointer transition-colors hover:border-primary/40 hover:bg-muted/40">
+      <Card className={`h-full ${interactiveCard}`}>
         <CardHeader>
           <CardTitle>Resumo rápido</CardTitle>
         </CardHeader>

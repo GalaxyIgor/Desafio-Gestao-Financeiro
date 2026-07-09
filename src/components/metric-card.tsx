@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DeltaBadge, type Delta } from "@/components/delta-badge";
-import { cn } from "@/lib/utils";
+import { cn, interactiveCard } from "@/lib/utils";
 
 export function MetricCard({
   title,
@@ -17,12 +17,7 @@ export function MetricCard({
   href?: string;
 }) {
   const card = (
-    <Card
-      className={cn(
-        href &&
-          "cursor-pointer transition-colors hover:border-primary/40 hover:bg-muted/40",
-      )}
-    >
+    <Card className={cn(href && interactiveCard)}>
       <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {title}
