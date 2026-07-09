@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { Download } from "lucide-react";
 
 import { PageHeader } from "@/components/page-header";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,6 +27,7 @@ import { DeltaBadge } from "@/components/delta-badge";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { useReports } from "@/features/reports/api";
+import { exportReportsToXlsx } from "@/features/reports/export";
 import { IncomeExpenseChart } from "@/features/reports/components/income-expense-chart";
 
 const RANGES = [
@@ -43,18 +46,28 @@ export default function ReportsPage() {
         title="Relatórios"
         description="Análises e comparativos financeiros"
         action={
-          <Select value={range} onValueChange={(v) => setRange(v ?? "6m")}>
-            <SelectTrigger className="w-48">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {RANGES.map((r) => (
-                <SelectItem key={r.value} value={r.value}>
-                  {r.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-2">
+            <Select value={range} onValueChange={(v) => setRange(v ?? "6m")}>
+              <SelectTrigger className="w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {RANGES.map((r) => (
+                  <SelectItem key={r.value} value={r.value}>
+                    {r.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button
+              variant="outline"
+              disabled={!data}
+              onClick={() => data && exportReportsToXlsx(data, range)}
+            >
+              <Download className="size-4" />
+              Exportar Excel
+            </Button>
+          </div>
         }
       />
 
