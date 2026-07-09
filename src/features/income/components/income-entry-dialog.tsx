@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CategorySelect } from "@/features/categories/components/category-select";
 import { incomeEntrySchema, type IncomeEntryValues } from "../schema";
 import { useCreateIncomeEntry, useUpdateIncomeEntry } from "../api";
 
@@ -79,7 +80,7 @@ export function IncomeEntryDialog({
             description: entry.description,
             category: entry.category,
             status: entry.status,
-            amountReais: entry.amount / 100,
+            amountReais: entry.amount,
           }
         : {
             date: todayISO(),
@@ -97,7 +98,7 @@ export function IncomeEntryDialog({
       description: values.description,
       category: values.category,
       status: values.status,
-      amount: Math.round(values.amountReais * 100),
+      amount: Math.round(values.amountReais),
     };
     const onError = (e: unknown) =>
       toast.error(e instanceof Error ? e.message : "Erro ao salvar");
@@ -180,10 +181,17 @@ export function IncomeEntryDialog({
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label htmlFor="category">Categoria</Label>
-              <Input
-                id="category"
-                placeholder="Ex.: Trabalho"
-                {...register("category")}
+              <Controller
+                control={control}
+                name="category"
+                render={({ field }) => (
+                  <CategorySelect
+                    id="category"
+                    type="income"
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  />
+                )}
               />
               {errors.category && (
                 <p className="text-xs text-destructive">

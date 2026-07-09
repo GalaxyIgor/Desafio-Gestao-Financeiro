@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CategorySelect } from "@/features/categories/components/category-select";
 import {
   expenseEntrySchema,
   paymentMethodLabels,
@@ -179,10 +180,17 @@ export function ExpenseEntryDialog({
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label htmlFor="category">Categoria</Label>
-              <Input
-                id="category"
-                placeholder="Ex.: Moradia"
-                {...register("category")}
+              <Controller
+                control={control}
+                name="category"
+                render={({ field }) => (
+                  <CategorySelect
+                    id="category"
+                    type="expense"
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  />
+                )}
               />
               {errors.category && (
                 <p className="text-xs text-destructive">
