@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { formatCurrency, formatPercent } from "@/lib/format";
-import { cn } from "@/lib/utils";
+import { cn, interactiveCard } from "@/lib/utils";
 
 interface BreakdownItem {
   label: string;
@@ -21,11 +21,7 @@ export function BreakdownCard({
 }) {
   const card = (
     <Card
-      className={cn(
-        "h-full",
-        href &&
-          "cursor-pointer transition-colors hover:border-primary/40 hover:bg-muted/40",
-      )}
+      className={cn("h-full", href && interactiveCard)}
     >
       <CardHeader>
         <CardTitle>{title}</CardTitle>
