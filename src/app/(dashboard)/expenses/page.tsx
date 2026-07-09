@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Pencil, Plus } from "lucide-react";
 
 import { PageHeader } from "@/components/page-header";
+import { MonthNavigator, currentMonth } from "@/components/month-navigator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -24,7 +25,8 @@ import { ExpensesTable } from "@/features/expenses/components/expenses-table";
 import { LimitDialog } from "@/features/expenses/components/limit-dialog";
 
 export default function ExpensesPage() {
-  const overview = useExpensesOverview();
+  const [month, setMonth] = useState(currentMonth());
+  const overview = useExpensesOverview(month);
   const entries = useExpenseEntries();
   const del = useDeleteExpense();
 
@@ -44,16 +46,24 @@ export default function ExpensesPage() {
 
   const ov = overview.data;
 
+  // A API /expenses/entries não filtra por mês → filtramos no cliente pela data.
+  const monthEntries = ((entries.data ?? []) as ExpenseEntry[]).filter((e) =>
+    e.date.startsWith(month),
+  );
+
   return (
     <>
       <PageHeader
         title="Despesas"
         description="Gastos, limite mensal e categorias"
         action={
-          <Button onClick={openNew}>
-            <Plus className="size-4" />
-            Nova despesa
-          </Button>
+          <div className="flex items-center gap-2">
+            <MonthNavigator value={month} onChange={setMonth} />
+            <Button onClick={openNew}>
+              <Plus className="size-4" />
+              Nova despesa
+            </Button>
+          </div>
         }
       />
 
@@ -167,7 +177,7 @@ export default function ExpensesPage() {
             <Skeleton className="h-40 w-full" />
           ) : (
             <ExpensesTable
-              entries={(entries.data ?? []) as ExpenseEntry[]}
+              entries={monthEntries}
               onEdit={openEdit}
               onDelete={setDeleting}
             />

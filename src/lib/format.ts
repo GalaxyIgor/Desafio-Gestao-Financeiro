@@ -3,9 +3,9 @@ import { ptBR } from "date-fns/locale";
 
 /**
  * Formata valor monetário em BRL.
- * ATENÇÃO: a API mistura unidades — income/goals vêm em centavos (integer),
- * enquanto expenses/investments/overview vêm em reais (number).
- * Use { cents: true } nos domínios em centavos.
+ * Todos os valores da API estão em REAIS (o `integer` da spec é só ausência de
+ * centavos, não a unidade). A opção { cents: true } fica disponível como
+ * utilitário genérico, mas não é usada com esta API.
  */
 export function formatCurrency(
   value: number,

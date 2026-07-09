@@ -69,7 +69,7 @@ export function IncomeEntriesTable({
                 </Badge>
               </TableCell>
               <TableCell className="text-right font-medium">
-                {formatCurrency(entry.amount, { cents: true })}
+                {formatCurrency(entry.amount)}
               </TableCell>
               <TableCell>
                 <DropdownMenu>
